@@ -54,6 +54,8 @@ class States:
         return list(self) == list(other)
 
     def __getattr__(self, name: str):
+        if "_states" not in self.__dict__:
+            raise AttributeError("'_states' attribute is missing")
         if name in self._states:
             return self._states[name]
         raise AttributeError(f"{name} not found in {self.__class__.__name__}")
