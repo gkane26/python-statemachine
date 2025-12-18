@@ -11,6 +11,7 @@ from .exceptions import InvalidDefinition
 from .graph import iterate_states_and_transitions
 from .graph import visit_connected_states
 from .i18n import _
+from .registry import _REGISTRY
 from .state import State
 from .states import States
 from .transition import Transition
@@ -27,6 +28,9 @@ class StateMachineMetaclass(type):
         attrs: Dict[str, Any],
         strict_states: bool = False,
     ) -> None:
+        if _REGISTRY and cls.__name__ in _REGISTRY:
+            _REGISTRY.pop(cls.__name__)
+
         super().__init__(name, bases, attrs)
         registry.register(cls)
         cls.name = cls.__name__
