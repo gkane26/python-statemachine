@@ -11,7 +11,6 @@ from .exceptions import InvalidDefinition
 from .graph import iterate_states_and_transitions
 from .graph import visit_connected_states
 from .i18n import _
-from .registry import _REGISTRY
 from .state import State
 from .states import States
 from .transition import Transition
@@ -28,9 +27,6 @@ class StateMachineMetaclass(type):
         attrs: Dict[str, Any],
         strict_states: bool = False,
     ) -> None:
-        if _REGISTRY and cls.__name__ in _REGISTRY:
-            _REGISTRY.pop(cls.__name__)
-
         super().__init__(name, bases, attrs)
         registry.register(cls)
         cls.name = cls.__name__
@@ -214,6 +210,14 @@ class StateMachineMetaclass(type):
             cls.add_event(event=Event(func._transitions, id=attr_name, name=attr_name))
 
     def add_state(cls, id, state: State):
+        if state in cls.states:
+            _keys = [
+                k
+                for k, v in cls.states._states.items()
+                if v.name == state.name and v.value == state.value
+            ]
+            _ = [cls.states._states.pop(k) for k in _keys]
+
         state._set_id(id)
         cls.states.append(state)
         cls.states_map[state.value] = state
