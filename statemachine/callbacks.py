@@ -195,8 +195,9 @@ class CallbackSpecList:
         self.items = []
 
     def grouper(self, group: CallbackGroup) -> SpecListGrouper:
-        if group not in self._groupers:
-            self._groupers[group] = SpecListGrouper(self, group)
+        if group in self._groupers:
+            del self._groupers[group]
+        self._groupers[group] = SpecListGrouper(self, group)
         return self._groupers[group]
 
     def _add(self, func, group: CallbackGroup, **kwargs):
