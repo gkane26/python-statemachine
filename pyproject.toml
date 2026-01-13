@@ -53,6 +53,7 @@ dev = [
     "furo >=2024.5.6; python_version >'3.8'",
     "sphinx-copybutton >=0.5.2; python_version >'3.8'",
     "pdbr>=0.8.9; python_version >'3.8'",
+    "dill>=0.3.7",
 ]
 
 [build-system]

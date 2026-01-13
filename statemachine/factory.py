@@ -210,6 +210,14 @@ class StateMachineMetaclass(type):
             cls.add_event(event=Event(func._transitions, id=attr_name, name=attr_name))
 
     def add_state(cls, id, state: State):
+        if state in cls.states:
+            _keys = [
+                k
+                for k, v in cls.states._states.items()
+                if v.name == state.name and v.value == state.value
+            ]
+            _ = [cls.states._states.pop(k) for k in _keys]
+
         state._set_id(id)
         cls.states.append(state)
         cls.states_map[state.value] = state
